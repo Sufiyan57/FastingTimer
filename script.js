@@ -70,11 +70,12 @@ function setIslamicDate() {
 
 function getIslamicDate(date) {
     let [month, day, yearAndEra] = date.split('/');
+    let [year, era] = yearAndEra.split(' ');
     const monthsIslamic = [
         'Muharram', 'Safar', 'Rabi\' al-awwal', 'Rabi\' al-thani', 'Jumada al-awwal', 'Jumada al-thani',
         'Rajab', 'Shaʻban', 'Ramadan', 'Shawwal', 'Dhu al-Qi\'dah', 'Dhu al-Hijjah'
     ];
-    const formattedDate = `${monthsIslamic[parseInt(month) - 1]} ${day}, ${yearAndEra}`;
+    const formattedDate = `${monthsIslamic[parseInt(month) - 1]} ${day}, ${year} AH`;
     return formattedDate;
 }
 
