@@ -1,0 +1,45 @@
+body {
+    background: linear-gradient(90deg,#11846d 100%,#0d6554 0);
+    color: #fff;
+    font-family: PT Sans,sans-serif;
+    max-width: 100%;
+    padding: 0 20px 20px;
+}
+h1, h2{
+    text-align: center;
+}
+.TimeBlock{
+    display: block;
+    float: inline-start;
+}
+.ClockWrapper {
+    background-color: #fff;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,.2);
+    font-weight: 700;
+    padding: 10px 10px;
+    max-width: 20vh;
+    margin: 10px;
+}
+
+.Clock {
+    color: #0d6554;
+    font-size: 1.7em;
+    min-height: 20px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.divTimeBlocks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.container h2, h1 {
+    margin-left: 10px; 
+}
+.islamicDate {
+    font-size: 18px;
+}
