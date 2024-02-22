@@ -23,7 +23,8 @@ async function setLocationCityName(latitude, longitude) {
 function setIslamicDate() {
     let myFormat = 'en-u-ca-islamic-umalqura-nu-latn'; // use islamic-umalqura calendar (most modern)
     let myDate = new Date(Date.now());
-    let islamicDate = new Intl.DateTimeFormat(myFormat, { dateStyle: 'long' }).format(myDate);
+    const locale = 'ar-SA';
+    let islamicDate = new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(myDate);
     document.getElementById('islamicDate').innerText = islamicDate;
 }
 
