@@ -21,11 +21,20 @@ async function setLocationCityName(latitude, longitude) {
 }
 
 function setIslamicDate() {
-    let myFormat = 'en-u-ca-islamic-umalqura-nu-latn'; // use islamic-umalqura calendar (most modern)
-    let myDate = new Date(Date.now());
-    const locale = 'ar-SA';
-    let islamicDate = new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(myDate);
-    document.getElementById('islamicDate').innerText = islamicDate;
+    let myDate = new Date();
+    let islamicDateOptions = { year: 'numeric', month: 'numeric', day: 'numeric', calendar: 'islamic-umalqura' };
+    let islamicDate = new Intl.DateTimeFormat('en-US', islamicDateOptions).format(myDate);
+    document.getElementById('islamicDate').innerText = getIslamicDate(islamicDate);
+}
+
+function getIslamicDate(date) {
+    let [month, day, yearAndEra] = date.split('/');
+    const monthsIslamic = [
+        'Muharram', 'Safar', 'Rabi\' al-awwal', 'Rabi\' al-thani', 'Jumada al-awwal', 'Jumada al-thani',
+        'Rajab', 'Shaʻban', 'Ramadan', 'Shawwal', 'Dhu al-Qi\'dah', 'Dhu al-Hijjah'
+    ];
+    const formattedDate = `${monthsIslamic[parseInt(month)-1]} ${day}, ${yearAndEra}`;
+    return formattedDate;
 }
 
 function getCurrentDateAsString() {
