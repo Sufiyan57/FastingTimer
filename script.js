@@ -1,64 +1,42 @@
 window.onload = async function () {
     try {
-        const position = await getPosition();
+        const position = await getCurrentPosition();
         await setAttributesValue(position);
+        document.querySelector(".loader-div").style.display = "none";
+        document.getElementById("page-container").classList.remove("blur");
     } catch (error) {
         alert(error);
     }
-
-    // Hide loader and remove blur
-    document.querySelector(".loader-div").style.display = "none";
-    document.getElementById("page-container").classList.remove("blur");
 }
 
-function getPosition() {
-    return new Promise((resolve, reject) => {
-        getCurrentPosition(function (position) {
-            if (position) {
-                resolve(position);
-            } else {
-                reject("Failed to retrieve location.");
-            }
-        });
-    });
-}
-
-async function setAttributesValue(position){
+async function setAttributesValue(position) {
     let { latitude, longitude } = position;
     const promises = [
-        setLocationCityName(latitude, longitude),
+        setLocationCityName(position.locationName),
         getSunriseSunset(latitude, longitude, getCurrentDateAsString()),
         setIslamicDate()
     ];
     await Promise.all(promises);
 }
 
-function getCurrentPosition(callback) {
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            let latitude = position.coords.latitude;
-            let longitude = position.coords.longitude;
-            callback({ latitude, longitude });
+async function getCurrentPosition() {
 
-        }, async (error) => {
-            console.error('Error:', error);
-            var locationByIPUrl = 'http://ip-api.com/json'
-            var locationData = await fetchDataFromAPI(locationByIPUrl)
-            const { lat, lon } = locationData;
-            let latitude = lat
-            let longitude = lon;
-            callback({latitude, longitude});
-        });
-    } else {
-        alert("Geolocation is not supported by your browser");
-        callback(null);
+    var getIPUrl = 'https://api.ipify.org/?format=json';
+    var IPResult = await fetchDataFromAPI(getIPUrl);
+    var getLocationUrl = `https://ipinfo.io/${IPResult.ip}/json`
+    var getLocationResult = await fetchDataFromAPI(getLocationUrl);
+    let { city, region, country } = getLocationResult;
+    let [latitude, longitude] = getLocationResult.loc.split(',');
+    return {
+        latitude,
+        longitude,
+        locationName: {city, region, country}
     }
 }
 
-async function setLocationCityName(latitude, longitude) {
-    var nominatimApiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
-    var result = await fetchDataFromAPI(nominatimApiUrl);
-    document.getElementById('location').innerText = result.address.city + ', ' + result.address.state + ', ' + result.address.country;
+async function setLocationCityName(locationName) {
+    let { city, region, country } = locationName
+    document.getElementById('location').innerText = city + ', ' + region + ', ' + country;
 }
 
 function setIslamicDate() {
@@ -144,6 +122,6 @@ async function fetchDataFromAPI(url) {
         return await response.json();
     } catch (error) {
         console.error('Error:', error);
-        alert("Failed to fetch api data.");
+        throw new Error("Failed to fetch API data. ❌");
     }
 }
